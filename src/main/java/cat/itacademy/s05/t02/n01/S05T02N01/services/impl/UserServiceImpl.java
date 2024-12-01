@@ -5,7 +5,9 @@ import cat.itacademy.s05.t02.n01.S05T02N01.exception.AlreadyExistsException;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.entities.Pet;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.entities.UserEntity;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.Accessory;
+import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetColor;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetLocation;
+import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetType;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.repositories.UserRepository;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.IUserService;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.models.dtos.PetRequestDTO;
@@ -43,19 +45,38 @@ public class UserServiceImpl implements IUserService {
         userRepository.delete(user);
     }
     
+//    @Override
+//    public UserEntity createPet(UserEntity userEntity, PetRequestDTO petRequestDTO) {
+//        boolean petExists = userEntity.getPets().stream()
+//                .anyMatch(pet -> pet.getName().equalsIgnoreCase(petRequestDTO.getName()));
+//
+//        if (petExists) {
+//            throw new AlreadyExistsException("Pet already exists");
+//        }
+//
+//        Pet newPet = Pet.builder()
+//                .name(petRequestDTO.getName())
+//                .type(petRequestDTO.getType())
+//                .color(petRequestDTO.getColor())
+//                .build();
+//
+//        userEntity.getPets().add(newPet);
+//        return userRepository.save(userEntity);
+//    }
+    
     @Override
-    public UserEntity createPet(UserEntity userEntity, PetRequestDTO petRequestDTO) {
+    public UserEntity createPet(UserEntity userEntity, String petName, PetColor color, PetType type) {
         boolean petExists = userEntity.getPets().stream()
-                .anyMatch(pet -> pet.getName().equalsIgnoreCase(petRequestDTO.getName()));
+                .anyMatch(pet -> pet.getName().equalsIgnoreCase(petName));
         
         if (petExists) {
             throw new AlreadyExistsException("Pet already exists");
         }
         
         Pet newPet = Pet.builder()
-                .name(petRequestDTO.getName())
-                .type(petRequestDTO.getType())
-                .color(petRequestDTO.getColor())
+                .name(petName)
+                .type(type)
+                .color(color)
                 .build();
         
         userEntity.getPets().add(newPet);

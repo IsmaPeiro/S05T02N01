@@ -1,7 +1,9 @@
 package cat.itacademy.s05.t02.n01.S05T02N01.controllers;
 
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.entities.UserEntity;
+import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetColor;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetLocation;
+import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetType;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.IUserService;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.models.dtos.PetRequestDTO;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.models.dtos.PetResponseDTO;
@@ -41,10 +43,16 @@ public class AdminController {
         return new ResponseEntity<>("User deleted.", HttpStatus.OK);
     }
     
+//    @PostMapping("/createPet")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+//    public ResponseEntity<UserEntity> createPet(@RequestBody String nickname, PetRequestDTO petRequestDTO) {
+//        return new ResponseEntity<>(userService.createPet(userService.getOneUser(nickname), petRequestDTO), HttpStatus.OK);
+//    }
+    
     @PostMapping("/createPet")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<UserEntity> createPet(@RequestBody String nickname, PetRequestDTO petRequestDTO) {
-        return new ResponseEntity<>(userService.createPet(userService.getOneUser(nickname), petRequestDTO), HttpStatus.OK);
+    public ResponseEntity<UserEntity> createPet(@RequestBody  String nickname, String petName, PetColor color, PetType type) {
+        return new ResponseEntity<>(userService.createPet(userService.getOneUser(nickname), petName, color, type), HttpStatus.OK);
     }
     
     @PostMapping("/deletePet")
