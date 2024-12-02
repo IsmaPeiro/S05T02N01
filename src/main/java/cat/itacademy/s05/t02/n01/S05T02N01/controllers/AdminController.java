@@ -38,7 +38,7 @@ public class AdminController {
     
     @DeleteMapping("/deleteUser")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUser(@RequestBody String nickname) {
+    public ResponseEntity<String> deleteUser(@RequestParam String nickname) {
         userService.deleteUser(nickname);
         return new ResponseEntity<>("User deleted.", HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class AdminController {
     
     @PostMapping("/deletePet")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> deletePet(@RequestBody String nickname, String petName) {
+    public ResponseEntity<UserEntity> deletePet(@RequestParam String nickname, String petName) {
         UserEntity user=userService.getOneUser(nickname);
         return new ResponseEntity<>(userService.deletePet(user, petName), HttpStatus.OK);
     }

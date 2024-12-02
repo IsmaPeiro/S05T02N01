@@ -25,32 +25,6 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
 
-//    @GetMapping("/getAllUsers")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<UserEntity>> getAllUsers () {
-//        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/getAllPets")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<PetResponseDTO>> getAllPets () {
-//        return new ResponseEntity<>(userService.getAllPets(), HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/deleteUser")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<String> deleteUser (@RequestBody String nickname) {
-//        userService.deleteUser(nickname);
-//        return new ResponseEntity<>("User deleted.", HttpStatus.OK);
-//    }
-
-//    @PostMapping("/createPet")
-//    @PreAuthorize("hasAnyRole('USER')")
-//    public ResponseEntity<UserEntity> createPet (@RequestBody PetRequestDTO petRequestDTO) {
-//        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-//        UserEntity userEntity=userService.getOneUser(authentication.getName());
-//        return new ResponseEntity<>(userService.createPet(userEntity, petRequestDTO), HttpStatus.OK);
-//    }
     
     @PostMapping("/createPet")
     @PreAuthorize("hasAnyRole('USER')")
@@ -62,7 +36,7 @@ public class UserController {
 
     @PostMapping("/deletePet")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> deletePet (@RequestBody String petName) {
+    public ResponseEntity<UserEntity> deletePet (@RequestParam String petName) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.deletePet(userEntity, petName), HttpStatus.OK);
@@ -86,7 +60,7 @@ public class UserController {
     
     @PostMapping("/feedPet")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> feedPet (@RequestBody String petName) {
+    public ResponseEntity<UserEntity> feedPet (@RequestParam String petName) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.feedPet(userEntity, petName), HttpStatus.OK);
@@ -94,7 +68,7 @@ public class UserController {
     
     @PostMapping("/playPet")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> playPet (@RequestBody String petName) {
+    public ResponseEntity<UserEntity> playPet (@RequestParam String petName) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.playPet(userEntity, petName), HttpStatus.OK);
@@ -102,7 +76,7 @@ public class UserController {
     
     @PostMapping("/petPet")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> petPet (@RequestBody String petName) {
+    public ResponseEntity<UserEntity> petPet (@RequestParam String petName) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.petPet(userEntity, petName), HttpStatus.OK);
@@ -110,7 +84,7 @@ public class UserController {
     
     @PostMapping("/sleepPet")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> sleepPet (@RequestBody String petName) {
+    public ResponseEntity<UserEntity> sleepPet (@RequestParam String petName) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.sleepPet(userEntity, petName), HttpStatus.OK);
@@ -118,7 +92,7 @@ public class UserController {
     
     @PostMapping("/changeLocation")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> changeLocation (@RequestBody String petName, PetLocation newLocation) {
+    public ResponseEntity<UserEntity> changeLocation (@RequestParam String petName, PetLocation newLocation) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.changeLocation(userEntity, petName, newLocation), HttpStatus.OK);
@@ -126,7 +100,7 @@ public class UserController {
     
     @PostMapping("/updateAccessory")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserEntity> updateAccessory (@RequestBody String petName, Accessory accessory) {
+    public ResponseEntity<UserEntity> updateAccessory (@RequestParam String petName, Accessory accessory) {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity=userService.getOneUser(authentication.getName());
         return new ResponseEntity<>(userService.updateAccessory(userEntity, petName, accessory), HttpStatus.OK);

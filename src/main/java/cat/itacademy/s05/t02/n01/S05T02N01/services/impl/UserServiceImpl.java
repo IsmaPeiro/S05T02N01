@@ -239,10 +239,11 @@ public class UserServiceImpl implements IUserService {
         users.forEach(user -> user.getPets().forEach(pet -> {
             long time = Duration.between(pet.getLastScheduledUpdate(), LocalDateTime.now()).toMinutes();
             if (time>0) {
+                pet.setEnergy(pet.getHunger()-(int)time);
                 pet.setHunger(pet.getHunger()+(int)time);
                 pet.setHappiness(pet.getHappiness()-(int)time);
                 pet.setLastScheduledUpdate(LocalDateTime.now());
-                pet.update();
+                pet.update("scheduledInteraction");
             }
         }));
         userRepository.saveAll(users);
@@ -256,9 +257,9 @@ public class UserServiceImpl implements IUserService {
                 .ifPresentOrElse(
                         pet->{
                             if (pet.getAccessories().contains(accessory)) {
-                                pet.getAccessories().remove(accessory);
+                                pet.removeAccessory(accessory);
                             } else {
-                                pet.getAccessories().add(accessory);
+                                pet.addAccessory(accessory);
                             }
                         },
                         () -> {

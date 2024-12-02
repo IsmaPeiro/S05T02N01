@@ -51,7 +51,7 @@ public class Pet {
         if (hunger>0) {
             setHunger(getHunger() - 5);
             setEnergy(getEnergy() + 5);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet is not hungry");
         }
@@ -62,17 +62,17 @@ public class Pet {
             setHunger(getHunger() + 5);
             setEnergy(getEnergy() - 5);
             setHappiness(getHappiness() + 5);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet is too tired");
         }
     }
     
     public void petPet() {
-        if (energy<1) {
+        if (energy>10) {
             setEnergy(getEnergy() - 5);
             setHappiness(getHappiness() + 5);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet needs to rest");
         }
@@ -82,7 +82,7 @@ public class Pet {
         if (energy<=75) {
             setHunger(getHunger() + 5);
             setEnergy(getEnergy() + 15);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet not need to rest");
         }
@@ -94,19 +94,20 @@ public class Pet {
             switch (newLocation) {
                 case HOME -> setHappiness(getHappiness() + 5);
                 case PARK -> setHappiness(getHappiness() + 20);
-                case VET -> setHappiness(getHappiness() - 20);
+                case VET -> setHappiness(getHappiness() - 50);
             }
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet is already in this location");
         }
     }
     
     public void addAccessory (Accessory accessory) {
+       
         if (!accessories.contains(accessory)) {
             accessories.add(accessory);
             setHappiness(getHappiness()+10);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet already has this accessory");
         }
@@ -116,13 +117,13 @@ public class Pet {
         if (accessories.contains(accessory)) {
             accessories.remove(accessory);
             setHappiness(getHappiness()-10);
-            update();
+            update("userInteraction");
         } else {
             throw new PetActionsException("The pet does not have this accessory");
         }
     }
     
-    public void update() {
+    public void update(String interactionType) {
         if (happiness == 100) {
             setPetMood(PetMood.EXCITED);
         } else if (happiness >= 50 && happiness <= 99) {
@@ -139,7 +140,10 @@ public class Pet {
             setPetMood(PetMood.TIRED);
         }
         
-        setLastInteraction(LocalDateTime.now());
-        setLastScheduledUpdate(LocalDateTime.now());
+        if (interactionType.equalsIgnoreCase("userInteraction")) {
+            setLastInteraction(LocalDateTime.now());
+        } else {
+            setLastScheduledUpdate(LocalDateTime.now());
+        }
     }
 }
