@@ -239,7 +239,7 @@ public class UserServiceImpl implements IUserService {
         users.forEach(user -> user.getPets().forEach(pet -> {
             long time = Duration.between(pet.getLastScheduledUpdate(), LocalDateTime.now()).toMinutes();
             if (time>0) {
-                pet.setEnergy(pet.getHunger()-(int)time);
+                pet.setEnergy(pet.getEnergy()-(int)time);
                 pet.setHunger(pet.getHunger()+(int)time);
                 pet.setHappiness(pet.getHappiness()-(int)time);
                 pet.setLastScheduledUpdate(LocalDateTime.now());
