@@ -70,7 +70,7 @@ public class Pet {
     
     public void petPet() {
         if (energy>10) {
-            setEnergy(getEnergy() - 5);
+            setEnergy(getEnergy() - 1);
             setHappiness(getHappiness() + 5);
             update("userInteraction");
         } else {
