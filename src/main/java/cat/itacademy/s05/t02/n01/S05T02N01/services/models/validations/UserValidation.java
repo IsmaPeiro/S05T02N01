@@ -15,7 +15,7 @@ public class UserValidation {
                         !user.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,16}$")
         ) {
             response.setNumOfErrors(response.getNumOfErrors() + 1);
-            response.setMessage("La contraseña debe tener entre 8 y 16 caracteres, al menos un número, una minúscula y una mayúscula.");
+            response.setMessage("The password must be between 8 and 16 characters, with at least one number, one lowercase letter, and one uppercase letter.");
         }
         
         return response;
