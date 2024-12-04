@@ -95,6 +95,9 @@ public class Pet {
     }
     
     public void changeLocation(PetLocation newLocation) {
+        if (newLocation==null) {
+            throw new PetActionsException("You must choose a location");
+        }
         if (newLocation!=getPetLocation()) {
             setPetLocation(newLocation);
             switch (newLocation) {
@@ -114,7 +117,9 @@ public class Pet {
     }
     
     public void addAccessory (Accessory accessory) {
-       
+        if (accessory==null) {
+            throw new PetActionsException("You must choose an accessory");
+        }
         if (!accessories.contains(accessory)) {
             accessories.add(accessory);
             setHappiness(getHappiness()+10);
@@ -125,6 +130,9 @@ public class Pet {
     }
     
     public void removeAccessory (Accessory accessory) {
+        if (accessory==null) {
+            throw new PetActionsException("You must choose an accessory");
+        }
         if (accessories.contains(accessory)) {
             accessories.remove(accessory);
             setHappiness(getHappiness()-10);
