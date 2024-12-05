@@ -4,10 +4,7 @@ import cat.itacademy.s05.t02.n01.S05T02N01.exception.NotFoundException;
 import cat.itacademy.s05.t02.n01.S05T02N01.exception.AlreadyExistsException;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.entities.Pet;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.entities.UserEntity;
-import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.Accessory;
-import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetColor;
-import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetLocation;
-import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.PetType;
+import cat.itacademy.s05.t02.n01.S05T02N01.persistence.enums.*;
 import cat.itacademy.s05.t02.n01.S05T02N01.persistence.repositories.UserRepository;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.IUserService;
 import cat.itacademy.s05.t02.n01.S05T02N01.services.models.dtos.PetRequestDTO;
@@ -238,12 +235,25 @@ public class UserServiceImpl implements IUserService {
         List<UserEntity> users = userRepository.findAll();
         users.forEach(user -> user.getPets().forEach(pet -> {
             long time = Duration.between(pet.getLastScheduledUpdate(), LocalDateTime.now()).toMinutes();
+            if (pet.getEnergy()==0
+                    &&pet.getHunger()<100&&pet.getPetLocation()==PetLocation.HOME) {
+                pet.getAccessories().clear();
+                pet.setPetMood(PetMood.ASLEEP);
+            }
             if (time>0) {
-                pet.setEnergy(pet.getEnergy()-(int)time);
-                pet.setHunger(pet.getHunger()+(int)time);
-                pet.setHappiness(pet.getHappiness()-(int)time);
-                pet.setLastScheduledUpdate(LocalDateTime.now());
-                pet.update("scheduledInteraction");
+                if (pet.getPetMood()== PetMood.ASLEEP&&pet.getEnergy()<100
+                &&pet.getHunger()<100&&pet.getPetLocation()==PetLocation.HOME) {
+                    pet.setEnergy(pet.getEnergy()+10*(int)time);
+                    pet.setHunger(pet.getHunger()+5*(int)time);
+                    pet.setLastScheduledUpdate(LocalDateTime.now());
+                    pet.update("scheduledSleep");
+                } else {
+                    pet.setEnergy(pet.getEnergy() - 5*(int) time);
+                    pet.setHunger(pet.getHunger() + 5*(int) time);
+                    pet.setHappiness(pet.getHappiness() - 5*(int) time);
+                    pet.setLastScheduledUpdate(LocalDateTime.now());
+                    pet.update("scheduledInteraction");
+                }
             }
         }));
         userRepository.saveAll(users);

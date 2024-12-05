@@ -58,7 +58,7 @@ public class Pet {
     }
     
     public void play() {
-        if (energy>0) {
+        if (energy>5) {
             setHunger(getHunger() + 5);
             setEnergy(getEnergy() - 5);
             setHappiness(getHappiness() + 5);
@@ -79,6 +79,12 @@ public class Pet {
     }
     
     public void sleepPet() {
+        if (getPetMood()==PetMood.ASLEEP) {
+            throw new PetActionsException("the pet is already sleeping");
+        }
+        if (getHunger()==100) {
+            throw new PetActionsException("the pet cannot rest when it is so hungry");
+        }
         if (petLocation==PetLocation.PARK||petLocation==PetLocation.VET)
         {
             throw new PetActionsException("The pet can not sleep in this location");
@@ -86,12 +92,16 @@ public class Pet {
         if (energy<=75) {
             accessories.clear();
             setHunger(getHunger() + 5);
-            setEnergy(getEnergy() + 15);
+            setEnergy(getEnergy() + 10);
             //update("userInteraction");
             update("sleep");
         } else {
             throw new PetActionsException("The pet not need to rest");
         }
+    }
+    
+    private void throwE () {
+        throw new PetActionsException("the pet cannot rest when it is so hungry");
     }
     
     public void changeLocation(PetLocation newLocation) {
@@ -120,6 +130,9 @@ public class Pet {
         if (accessory==null) {
             throw new PetActionsException("You must choose an accessory");
         }
+        if (getPetLocation()==PetLocation.VET) {
+            throw new PetActionsException("You can't use accessories in this location");
+        }
         if (!accessories.contains(accessory)) {
             accessories.add(accessory);
             setHappiness(getHappiness()+10);
@@ -143,31 +156,39 @@ public class Pet {
     }
     
     public void update(String interactionType) {
-        if (!interactionType.equalsIgnoreCase("sleep")) {
-            if (happiness == 100) {
-                setPetMood(PetMood.EXCITED);
-            } else if (happiness >= 50 && happiness <= 99) {
-                setPetMood(PetMood.HAPPY);
-            } else if (happiness >= 20 && happiness <= 49) {
-                setPetMood(PetMood.APATHETIC);
-            } else if (happiness >= 1 && happiness <= 19) {
-                setPetMood(PetMood.SAD);
-            } else if (happiness == 0) {
-                setPetMood(PetMood.ANGRY);
+        switch (interactionType) {
+            case "userInteraction" -> {
+                checkMood();
+                setLastInteraction(LocalDateTime.now());
+            }
+            case "scheduledInteraction" -> {
+                checkMood();
+                setLastScheduledUpdate(LocalDateTime.now());
+            }
+            case "sleep" -> {
+                setPetMood(PetMood.ASLEEP);
+                setLastInteraction(LocalDateTime.now());
             }
             
-            if (energy <= 20) {
-                setPetMood(PetMood.TIRED);
-            }
-        } else {
-            setPetMood(PetMood.ASLEEP);
+            case "scheduledSleep" -> setLastScheduledUpdate(LocalDateTime.now());
+        }
+    }
+    
+    private void checkMood () {
+        if (happiness == 100) {
+            setPetMood(PetMood.EXCITED);
+        } else if (happiness >= 50 && happiness <= 99) {
+            setPetMood(PetMood.HAPPY);
+        } else if (happiness >= 20 && happiness <= 49) {
+            setPetMood(PetMood.APATHETIC);
+        } else if (happiness >= 1 && happiness <= 19) {
+            setPetMood(PetMood.SAD);
+        } else if (happiness == 0) {
+            setPetMood(PetMood.ANGRY);
         }
         
-        if (interactionType.equalsIgnoreCase("userInteraction")
-        ||interactionType.equalsIgnoreCase("sleep")) {
-            setLastInteraction(LocalDateTime.now());
-        } else {
-            setLastScheduledUpdate(LocalDateTime.now());
+        if (energy <= 20) {
+            setPetMood(PetMood.TIRED);
         }
     }
 }
